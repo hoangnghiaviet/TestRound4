@@ -3,42 +3,16 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-# -- Update configuration ----------------------------------------------------
-
-import pandas as pd
-input_config_path = "config.xlsx"
-artifact_key_dict = {
-    "Attribute Type": "artifact_type",
-    "Status": "status",
-    "Identifier": "id",
-    "Safety Classification": "safety_level",
-    "CRQ": "crq",
-    "ReqIF.Text": "ReqIF.Text",
-    "Title": "title",
-    "Verification Criteria": "verify",
-    "Created On": "created_on",
-    "Description": "description",
-    "VAR_FUNC_SYS": "variant",
-    "Allocation": "allocation",
-    "Modified On": "modified_on",
-    "Contributor": "contributor",
-    "Creator": "created_by"
-}
-
-config_file = pd.read_excel(input_config_path, sheet_name="AttributeMapping")
-for index, row in config_file.iterrows():
-    key = row["Attribute Name"]
-    rst_value = row["New Attribute Name(RST FILE)"]
-    if key in artifact_key_dict:
-        if str(rst_value) != "nan":
-            artifact_key_dict[key] = rst_value
-
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+import sys
+import os
 project = 'CodeRace'
-copyright = '2023, BGSV'
-author = 'EET'
+copyright = '2023, BGSdsffV'
+author = 'fdsfdsf'
+
+sys.path.insert(0, os.path.abspath('../source'))
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -51,19 +25,27 @@ extensions = [
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
+# source_suffix = ['.rst', '.md']
+source_suffix = '.rst'
+
+# The master toctree document.
+master_doc = 'index'
 
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'alabaster'
 html_static_path = ['_static']
 
 needs_types = [
-               dict(directive="sys_req", title="System Requirement", prefix="SYSTEM_REQ_", color="#ac6dd1", style="artifact"),
-               dict(directive="sw_req", title="Software Requirement", prefix="SOFTWARE_REQ_", color="#ac6dd1", style="artifact"),
-               dict(directive=artifact_key_dict["Verification Criteria"], title="Verification Criteria", prefix="VC_", color="#fedcd2", style="artifact")
-               ]
+    dict(directive="sys_req", title="System Requirement",
+         prefix="SYSTEM_REQ_", color="#ac6dd1", style="artifact"),
+    dict(directive="sw_req", title="Software Requirement",
+         prefix="SOFTWARE_REQ_", color="#ac6dd1", style="artifact"),
+    dict(directive="verify", title="Verification Criteria",
+         prefix="VC_", color="#fedcd2", style="artifact")
+]
 
-needs_extra_options = [artifact_key_dict["Creator"], 'url',  'date', 'time',  artifact_key_dict["Safety Classification"],
-                       artifact_key_dict["Attribute Type"], artifact_key_dict["CRQ"], 'test_level']
+needs_extra_options = ['created_by', 'url',  'date', 'time',  'safety_level',  'artifact_type', 'crq',
+                       'test_level']
